@@ -1,3 +1,4 @@
+// Adapted from: https://github.com/kstenerud/KSCrash
 //
 //  SentryCrashMonitor_MachException.c
 //
@@ -50,9 +51,9 @@
 
 #    ifdef __LP64__
 #        define MACH_ERROR_CODE_MASK 0xFFFFFFFFFFFFFFFF
-#    else
+#    else // !__LP64__
 #        define MACH_ERROR_CODE_MASK 0xFFFFFFFF
-#    endif
+#    endif // __LP64__
 
 // ============================================================================
 #    pragma mark - Types -
@@ -266,7 +267,7 @@ sentrycrashcm_hasReservedThreads(void)
     return g_primaryMachThread != 0 && g_secondaryMachThread != 0;
 }
 
-#else
+#else // !SentryCrashCRASH_HAS_MACH
 bool
 sentrycrashcm_isReservedThread(thread_t thread)
 {
@@ -279,7 +280,7 @@ sentrycrashcm_hasReservedThreads(void)
     return false;
 }
 
-#endif
+#endif // SentryCrashCRASH_HAS_MACH
 
 #if SentryCrashCRASH_HAS_MACH
 
@@ -411,7 +412,6 @@ handleExceptions(void *const userData)
         SentryCrashLOG_DEBUG("Crash handling complete. Restoring original handlers.");
         g_isHandlingCrash = false;
         sentrycrashmc_resumeEnvironment(threads, numThreads);
-        sentrycrash_async_backtrace_decref(g_stackCursor.async_caller);
     }
 
     SentryCrashLOG_DEBUG("Replying to mach exception message.");
@@ -431,7 +431,7 @@ handleExceptions(void *const userData)
 // ============================================================================
 
 static void
-uninstallExceptionHandler()
+uninstallExceptionHandler(void)
 {
     SentryCrashLOG_DEBUG("Uninstalling mach exception handler.");
 
@@ -468,7 +468,7 @@ uninstallExceptionHandler()
 }
 
 static bool
-installExceptionHandler()
+installExceptionHandler(void)
 {
     SentryCrashLOG_DEBUG("Installing mach exception handler.");
 
@@ -567,7 +567,7 @@ setEnabled(bool isEnabled)
 }
 
 static bool
-isEnabled()
+isEnabled(void)
 {
     return g_isEnabled;
 }
@@ -582,17 +582,17 @@ addContextualInfoToEvent(struct SentryCrash_MonitorContext *eventContext)
     }
 }
 
-#endif
+#endif // SentryCrashCRASH_HAS_MACH
 
 SentryCrashMonitorAPI *
-sentrycrashcm_machexception_getAPI()
+sentrycrashcm_machexception_getAPI(void)
 {
     static SentryCrashMonitorAPI api = {
 #if SentryCrashCRASH_HAS_MACH
         .setEnabled = setEnabled,
         .isEnabled = isEnabled,
         .addContextualInfoToEvent = addContextualInfoToEvent
-#endif
+#endif // SentryCrashCRASH_HAS_MACH
     };
     return &api;
 }

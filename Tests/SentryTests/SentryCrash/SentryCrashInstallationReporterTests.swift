@@ -1,4 +1,5 @@
 @testable import Sentry
+import SentryTestUtils
 import XCTest
 
 class SentryCrashInstallationReporterTests: XCTestCase {
@@ -20,6 +21,7 @@ class SentryCrashInstallationReporterTests: XCTestCase {
         super.tearDown()
         sentrycrash_deleteAllReports()
         clearTestState()
+        sut.uninstall()
     }
     
     func testReportIsSentAndDeleted() throws {

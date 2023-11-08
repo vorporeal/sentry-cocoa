@@ -28,18 +28,22 @@ typedef NS_ENUM(NSUInteger, SentrySpanStatus);
 @property (nonatomic, class, readonly) SentryPerformanceTracker *shared;
 
 - (SentrySpanId *)startSpanWithName:(NSString *)name operation:(NSString *)operation;
+
 - (SentrySpanId *)startSpanWithName:(NSString *)name
                          nameSource:(SentryTransactionNameSource)source
-                          operation:(NSString *)operation;
+                          operation:(NSString *)operation
+                             origin:(NSString *)origin;
 
 - (void)activateSpan:(SentrySpanId *)spanId duringBlock:(void (^)(void))block;
 
 - (void)measureSpanWithDescription:(NSString *)description
                          operation:(NSString *)operation
+                            origin:(NSString *)origin
                            inBlock:(void (^)(void))block;
 
 - (void)measureSpanWithDescription:(NSString *)description
                          operation:(NSString *)operation
+                            origin:(NSString *)origin
                       parentSpanId:(SentrySpanId *)parentSpanId
                            inBlock:(void (^)(void))block;
 

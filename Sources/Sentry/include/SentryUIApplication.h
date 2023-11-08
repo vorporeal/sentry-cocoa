@@ -1,7 +1,13 @@
 #import "SentryDefines.h"
 
 #if SENTRY_HAS_UIKIT
-#    import <UIKit/UIKit.h>
+
+@class UIApplication;
+@class UIScene;
+@class UIWindow;
+@protocol UIApplicationDelegate;
+
+typedef NS_ENUM(NSInteger, UIApplicationState);
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -9,6 +15,11 @@ NS_ASSUME_NONNULL_BEGIN
  * A helper tool to retrieve informations from the application instance.
  */
 @interface SentryUIApplication : NSObject
+
+/**
+ * Returns the application state available at @c NSApplication.sharedApplication.applicationState
+ */
+@property (nonatomic, readonly) UIApplicationState applicationState;
 
 /**
  * Application shared UIApplication instance.
@@ -33,4 +44,5 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-#endif
+
+#endif // SENTRY_HAS_UIKIT

@@ -1,42 +1,23 @@
-#import <Sentry/Sentry.h>
 #import <XCTest/XCTest.h>
 
 #import "NSDate+SentryExtras.h"
+#import "SentryBreadcrumb.h"
+#import "SentryEvent.h"
+#import "SentryException.h"
 #import "SentryFileManager.h"
+#import "SentryFrame.h"
 #import "SentryId.h"
+#import "SentryMechanism.h"
 #import "SentryMeta.h"
+#import "SentryStackTrace.h"
+#import "SentryThread.h"
+#import "SentryUser.h"
 
 @interface SentryInterfacesTests : XCTestCase
 
 @end
 
 @implementation SentryInterfacesTests
-
-// TODO test event
-
-- (void)testDebugMeta
-{
-    SentryDebugMeta *debugMeta = [[SentryDebugMeta alloc] init];
-    debugMeta.uuid = @"abcd";
-    XCTAssertNotNil(debugMeta.uuid);
-    NSDictionary *serialized = @{ @"uuid" : @"abcd" };
-    XCTAssertEqualObjects([debugMeta serialize], serialized);
-
-    SentryDebugMeta *debugMeta2 = [[SentryDebugMeta alloc] init];
-    debugMeta2.uuid = @"abcde";
-    debugMeta2.imageAddress = @"0x0000000100034000";
-    debugMeta2.type = @"1";
-    debugMeta2.imageSize = @(4);
-    debugMeta2.name = @"name";
-    NSDictionary *serialized2 = @{
-        @"image_addr" : @"0x0000000100034000",
-        @"image_size" : @(4),
-        @"type" : @"1",
-        @"name" : @"name",
-        @"uuid" : @"abcde"
-    };
-    XCTAssertEqualObjects([debugMeta2 serialize], serialized2);
-}
 
 - (void)testFrame
 {

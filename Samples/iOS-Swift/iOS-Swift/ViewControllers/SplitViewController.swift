@@ -13,6 +13,11 @@ class SplitViewController: UISplitViewController {
         super.init(coder: coder)
         initialize()
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        SentrySDK.reportFullyDisplayed()
+    }
     
     private func initialize() {
         self.modalPresentationStyle = .fullScreen
@@ -20,9 +25,10 @@ class SplitViewController: UISplitViewController {
 }
 
 class SplitRootViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        SentrySDK.reportFullyDisplayed()
     }
     
     @IBAction func close() {
@@ -57,9 +63,10 @@ class SecondarySplitViewController: UIViewController {
 
         spanObserver = createTransactionObserver(forCallback: assertTransaction)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        SentrySDK.reportFullyDisplayed()
     }
      
     func assertTransaction(span: Span) {

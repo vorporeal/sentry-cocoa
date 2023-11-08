@@ -1,4 +1,5 @@
 import MetricKit
+import SentryTestUtils
 import XCTest
 
 #if os(iOS) || os(macOS)
@@ -11,6 +12,11 @@ import MetricKit
 #endif
 
 final class SentryMXManagerTests: XCTestCase {
+    
+    override func tearDown() {
+        super.tearDown()
+        clearTestState()
+    }
 
     func testReceiveNoPayloads() {
         if #available(iOS 15, macOS 12, macCatalyst 15, *) {
@@ -123,8 +129,8 @@ class TestMXDiagnosticPayload: MXDiagnosticPayload {
         var diskWriteDiagnostic: [MXDiskWriteExceptionDiagnostic]?
         var hangDiagnostic: [MXHangDiagnostic]?
         
-        var timeStampBegin = CurrentDate.date()
-        var timeStampEnd = CurrentDate.date()
+        var timeStampBegin = SentryDependencyContainer.sharedInstance().dateProvider.date()
+        var timeStampEnd = SentryDependencyContainer.sharedInstance().dateProvider.date()
     }
     
     var overrides = Override()
